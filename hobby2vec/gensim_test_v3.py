@@ -28,7 +28,7 @@ for index in [""]+[str(i) for i in range(3,14)]:
         # out = [""+item[0] for topic in topic_list for item in topic]
 
         # whole_list.extend(topic_list)
-        word_list = jieba.lcut(out)
+        word_list = psg.lcut(out)
         whole_list.extend(word_list)
 
 word_list = [tmp.word for tmp in whole_list]
@@ -47,9 +47,12 @@ model.build_vocab([word_list])
 key_word_list = ['白羊','金牛','双子','巨蟹','狮子','处女','天秤','天蝎','射手','摩羯','水瓶','双鱼']
 for sign in key_word_list:
     try:
-        pred_relation = model.similar_by_word(sign,3)
-        print ('the sign {:s}is most related with following word'.format(sign),[tmp[0] for tmp in pred_relation])
+        pred_relation = model.similar_by_word(sign,40)
+        all_top_noun = [tmp[0] for tmp in pred_relation if word2type_dict[tmp[0]] == 'n']
+        pred_relation_show = all_top_noun[:3]
+        print ('the sign {:s}is most related with following word'.format(sign), pred_relation_show)
     except:
         print ('{:s} is not found'.format(sign))
-        # TODO make this simple program be able to handle POS
+        # todo Add frequency screener
+
 # model = word2vec.Word2Vec(tmp_dic, size=10)  # 默认window=5
